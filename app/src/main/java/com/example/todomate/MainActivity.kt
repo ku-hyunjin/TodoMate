@@ -2,35 +2,35 @@ package com.example.todomate
 
 import android.os.Bundle
 import android.view.inputmethod.EditorInfo //1. Enter 감지용 추가
-import android.widget.Button
-import android.widget.EditText //2. EditText용 추가
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.todomate.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+    //뷰 바인딩 선언
+    private lateinit var binding: ActivityMainBinding
     //3. 입력된 To do 텍스트들을 차곡차곡 저장할 동적 배열(리스트) 추가
     private val todoList = mutableListOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_main)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+        //뷰 바인딩 추가
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        //4. XML에서 만든 입력창(EditText)를 코틀린 코드로 가져오기 추가
-        val editTodoInput = findViewById<EditText>(R.id.editTodoInput)
-        val myButton = findViewById<Button>(R.id.addButton)
-
         // 5. 공통으로 쓸 입력 처리 함수 추가
         fun handleAddTodo() {
-            val taskText = editTodoInput.text.toString().trim()
+            val taskText = binding.editTodoInput.text.toString().trim()
 
             // 6. 사용자가 아무것도 안 적고 버튼을 눌렀을 때 예외 처리 기능 추가
             if (taskText.isEmpty()) {
@@ -45,17 +45,18 @@ class MainActivity : AppCompatActivity() {
             //8. 성공 메시지 띄우기(입력한 내용이 토스트에 동적으로 표시)
             Toast.makeText(this, "\"$taskText\" added!", Toast.LENGTH_SHORT).show()
 
-            //9. 다음 할일 입력할 수 있도록 입력창을 깨끗하게 비워주는 기능 추가
-            editTodoInput.text.clear()
+            //9. 다음 할일 입력할 수 있도록 입력창을 깨끗하게 비워주는 기능 추가, 바인딩으로 수정
+            binding.editTodoInput.text.clear()
         }
 
-        myButton.setOnClickListener {
+        //이 부분도 바인딩으로 수정
+        binding.addButton.setOnClickListener {
             handleAddTodo()
 
         }
 
-        // 10. Keyboard Enter완료 시 위에서 만든 함수 실행
-        editTodoInput.setOnEditorActionListener {_, actionId, _ ->
+        // 10. Keyboard Enter완료 시 위에서 만든 함수 실행, 바인딩으로 바로 연결
+        binding.editTodoInput.setOnEditorActionListener {_, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 handleAddTodo()
                 true
