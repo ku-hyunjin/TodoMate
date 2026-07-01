@@ -8,10 +8,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.todomate.databinding.ActivityMainBinding
+import androidx.recyclerview.widget.LinearLayoutManager
 
 class MainActivity : AppCompatActivity() {
-    //뷰 바인딩 선언
+    // 뷰 바인딩 선언
     private lateinit var binding: ActivityMainBinding
+
+    // RecyclerView 와 연결한 Adapter
+    private lateinit var todoAdapter: TodoAdapter
+
     //3. 입력된 To do 텍스트들을 차곡차곡 저장할 동적 배열(리스트) 추가
     private val todoList = mutableListOf<String>()
 
@@ -21,6 +26,15 @@ class MainActivity : AppCompatActivity() {
         //뷰 바인딩 추가
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        //Adapter 생성
+        todoAdapter = TodoAdapter(todoList)
+
+        //RecyclerView에 Adapter 연결
+        binding.recyclerView.adapter = todoAdapter
+
+        //RecyclerView를 세로 리스트로 표시
+        binding.recyclerView.layoutManager = LinearLayoutManager(this)
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -41,6 +55,9 @@ class MainActivity : AppCompatActivity() {
 
             // 7. Memory List(투두리스트)에 입력된 텍스트를 넣는 진짜 데이터 저장 기능 추가
             todoList.add(taskText)
+
+            //RecyclerView에 새 아이템 추가되었다고 호출하는 알림
+            todoAdapter.notifyItemInserted(todoList.size - 1)
 
             //8. 성공 메시지 띄우기(입력한 내용이 토스트에 동적으로 표시)
             Toast.makeText(this, "\"$taskText\" added!", Toast.LENGTH_SHORT).show()
