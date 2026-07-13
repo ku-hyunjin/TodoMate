@@ -28,7 +28,14 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         //Adapter 생성
-        todoAdapter = TodoAdapter(todoList)
+        todoAdapter = TodoAdapter(todoList) { position ->
+
+            //해당 위치 Todo 데이터 삭제
+            todoList.removeAt(position)
+
+            //RecyclerView 화면 갱신
+            todoAdapter.notifyItemRemoved(position)
+        }
 
         //RecyclerView에 Adapter 연결
         binding.recyclerView.adapter = todoAdapter

@@ -29,9 +29,22 @@
             android:text="Sample Todo"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/deleteButton"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <!-- 삭제 버튼 추가, 버튼 배경색 빨간색으로 변경 후 적용-->
+        <ImageButton
+            android:id="@+id/deleteButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/button_delete_background"
+            android:src="@android:drawable/ic_menu_delete"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
