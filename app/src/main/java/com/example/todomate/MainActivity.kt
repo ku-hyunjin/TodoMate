@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var todoAdapter: TodoAdapter
 
     //3. 입력된 To do 텍스트들을 차곡차곡 저장할 동적 배열(리스트) 추가
-    private val todoList = mutableListOf<String>()
+    private val todoList = mutableListOf<Todo>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             // 7. Memory List(투두리스트)에 입력된 텍스트를 넣는 진짜 데이터 저장 기능 추가
-            todoList.add(taskText)
+            todoList.add(Todo(taskText))
 
             //RecyclerView에 새 아이템 추가되었다고 호출하는 알림
             todoAdapter.notifyItemInserted(todoList.size - 1)
