@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
+    id("com.google.devtools.ksp")      // KSP 적용 (버전은 Project 파일에서 가져옵니다)
 }
 
 android {
@@ -45,4 +46,13 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
+
+    // ======= 최신 Room DB (KSP 방식) =======
+    val room_version = "2.6.1"
+    implementation("androidx.room:room-runtime:$room_version")
+    ksp("androidx.room:room-compiler:$room_version") // 👈 kapt가 아닌 ksp를 사용합니다!
+
+    // 코루틴(백그라운드 처리)을 위한 Room KTX
+    implementation("androidx.room:room-ktx:$room_version")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
 }
