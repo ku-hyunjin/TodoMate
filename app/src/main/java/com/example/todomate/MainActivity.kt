@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
         todoAdapter = TodoAdapter(todoList) { position ->
             todoList.removeAt(position)
             todoAdapter.notifyItemRemoved(position)
-            // (참고: 지금은 화면에서만 지워집니다. DB에서 지우는 건 다음 스텝에서 배웁니다!)
+
         }
 
         binding.recyclerView.adapter = todoAdapter
@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         fun handleAddTodo() {
-            val taskText = binding.editTodoInput.text.toString().trim()
+            val taskText = binding.editTodoInput.text?.toString()?.trim().orEmpty()
 
             if (taskText.isEmpty()) {
                 Toast.makeText(this, "Please enter a task!", Toast.LENGTH_SHORT).show()
@@ -62,16 +62,16 @@ class MainActivity : AppCompatActivity() {
             // 새로운 할 일 객체 생성 (Room DB에 넣을 형태)
             val newTodo = Todo(text = taskText)
 
-            // 🌟 [추가 3] 코루틴을 사용해 백그라운드에서 DB에 안전하게 저장!
+            // 🌟 [추가 3] 코루틴을 사용해 백그라운드에서 DB에 안전하게 저장
             lifecycleScope.launch(Dispatchers.IO) {
                 db.todoDao().insertTodo(newTodo)
             }
 
-            // 아래는 개발자님이 짜두신 기존 화면(UI) 갱신 코드 그대로입니다!
+
             todoList.add(newTodo)
             todoAdapter.notifyItemInserted(todoList.size - 1)
             Toast.makeText(this, "\"$taskText\" added!", Toast.LENGTH_SHORT).show()
-            binding.editTodoInput.text.clear()
+            binding.editTodoInput.text?.clear()
         }
 
         binding.addButton.setOnClickListener {
